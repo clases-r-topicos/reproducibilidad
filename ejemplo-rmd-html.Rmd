@@ -1,0 +1,97 @@
+---
+title: "Demostración Rmarkdown HTML"
+author: "PE SSCC - Fase 5"
+date: "25/11/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Título 1: Demostración en RMarkddown
+## Título 2: Demostración en RMarkddown
+### Título 3: Demostración en RMarkddown
+#### Título 4: Demostración en RMarkddown
+##### Título 5: Demostración en RMarkddown
+###### Título 6: Demostración en RMarkddown
+
+
+### Carga de librerías
+
+Recomendamos cargar todas las librerías a utilizar en el script en un chunk al principio, para que así quien replique el código sepa que debe instalar y para qué.
+
+Tenemos diversos argumentos que nos permiten manipular los mensajes (`message`) y las advertencias (`warning`), que nos permiten administrar la limpieza del output. 
+
+```{r,eval=TRUE}
+library(tidyverse) # para manipulación de datos y graficar
+library(haven) # para importar desde .dta
+```
+
+### Carga de datos
+
+```{r, eval = T}
+options(scipen = "999") #para eliminar notación científica
+#Abrir base de la epf
+path <- "C:/Users/Trabajo/Documents/Nacho/VIII EPF/"
+epf <- read_dta(paste0(path, "BASE_PERSONAS_VIII_EPF.dta"))
+```
+
+### Manipulación de datos
+
+Acá **arreglamos** los datos para *graficar* despues.
+
+Puedo hacer comentarios con # dentro del chunk, que funciona como un trozo de script.
+
+```{r}
+names(epf) <- tolower(names(epf)) #pasar a minúscula
+
+#Reemplazar las comas por punto
+epf2 <- epf %>% 
+  select(gastot_hd_pc, ing_disp_hog_hd_pc, zona , jhogar, sexo) %>% 
+  mutate_at(vars(gastot_hd_pc, ing_disp_hog_hd_pc), funs(as.numeric(gsub(pattern = ",", replacement = ".", x = .)) )) %>% 
+  filter(jhogar == 1) #dejar un registro por hogar
+
+#Calcular los puntos de corte para los quintiles  
+quintiles <- quantile(x = epf2$ing_disp_hog_hd_pc, c(0, 0.2, 0.4, 0.6, 0.8, 1)) 
+
+#Crear la variable quintil.
+epf2 <- epf2 %>% 
+  mutate(quintil =  case_when(
+    ing_disp_hog_hd_pc <= quintiles[2] ~ "quntil1",
+    ing_disp_hog_hd_pc <= quintiles[3] ~ "quntil2",
+    ing_disp_hog_hd_pc <= quintiles[4] ~ "quntil3",
+    ing_disp_hog_hd_pc <= quintiles[5] ~ "quntil4",
+    ing_disp_hog_hd_pc <= quintiles[6] ~ "quntil5")
+)
+
+```
+
+
+### Gráfico 1
+
+
+```{r, eval=T}
+epf2 %>%
+  group_by(quintil) %>%  # 
+  summarise_at(vars(gastot_hd_pc, ing_disp_hog_hd_pc), funs(mean)) %>% 
+  pivot_longer(-quintil, names_to = "tipo", values_to = "valor") %>% #
+  ggplot(aes(quintil, valor, fill = tipo )) +
+  geom_bar(stat = "identity", position = "dodge")
+
+```
+
+
+### Gráfico 2
+
+```{r, eval=T,fig.align='center', fig.height=4, fig.width=4}
+epf2 %>%
+  group_by(zona) %>% #
+  summarise_at(vars(gastot_hd_pc, ing_disp_hog_hd_pc), funs(mean)) %>% 
+  pivot_longer(-zona, names_to = "tipo", values_to = "valor") %>% #
+  ggplot(aes(as.factor(zona), valor, fill = tipo )) +
+  geom_bar(stat = "identity", position = "dodge")
+```
+
+
