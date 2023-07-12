@@ -122,6 +122,17 @@ background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
+# Motivación
+
+<br/>
+.center[<img src="https://i.giphy.com/media/l0NgQIwNvU9AUuaY0/200w.webp" width=500/>]
+
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
 # Comentario preliminar
 
 .center[
