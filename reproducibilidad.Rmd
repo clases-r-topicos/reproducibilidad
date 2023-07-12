@@ -238,7 +238,7 @@ background-position: 100% 0%
 .pull-rigth[
 <br/>
 <br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="imagenes/ten-years2.PNG" width="300"/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="imagenes/ten-years2.png" width="300"/>
 ]
 
 ---
@@ -466,7 +466,7 @@ background-position: 100% 0%
 
 .panel[.panel-name[¿Cómo funciona?]
 
-.center[<img src = "imagenes/esquema-rmarkdown.jpg" width=800/>]
+.center[<img src = "imagenes/esquema-rmarkdown.JPG" width=800/>]
 Healy, Kieran. 2018. The Plain Person’s Guide to Plain Text Social Science.
   ]
 
@@ -552,7 +552,7 @@ Luego hay dos opciones:
 
 - Al crear un proyecto le indicamos que queremos usar renv vía cuadro de diálogo
 
-<img src="imagenes/crear-renv.jpg" width="300" />
+<img src="imagenes/crear-renv.JPG" width="300" />
 
 ]
 
@@ -583,7 +583,7 @@ background-position: 100% 0%
 .panel[.panel-name[¿Qué vemos?]
 <br/>
 
-.center[<img src="imagenes/renv-init.PNG" width=400/>]
+.center[<img src="imagenes/renv-init.png" width=400/>]
 
 ]
 
