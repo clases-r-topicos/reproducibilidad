@@ -137,7 +137,7 @@ background-position: 100% 0%
 
 .center[
 <img src="imagenes/diana.png" width="300" />
-### Público objetivo: Usuarios y usuarias intermedios de R con algunos conocimientos de Git
+### Público objetivo: orientado a usuarios y usuarias intermedios de R
 ]
 
 --
@@ -195,7 +195,7 @@ background-position: 100% 0%
 
 .panel[.panel-name[¿Sus dimensiones?]
 
-.center[<img src ="imagenes/repro-repli.jpg" width="600"/>]
+.center[<img src ="imagenes/repro-repli.JPG" width="600"/>]
 
   ]   
 ]
@@ -280,7 +280,7 @@ Me permite explorar objetos rápidamente con código residual
 
 .medium-par[Desventajas:]
 
-- Solo puedo escribir línea por línea
+- Es más complejo desplazarse por distintas líneas de código
 
 --
 
@@ -475,10 +475,9 @@ background-position: 100% 0%
 ]
 
 
-.panel[.panel-name[¿Cómo funciona?]
+.panel[.panel-name[¿Qué contiene?]
 
-.center[<img src = "imagenes/esquema-rmarkdown.JPG" width=800/>]
-Healy, Kieran. 2018. The Plain Person’s Guide to Plain Text Social Science.
+.center[<img src = "imagenes/captura-rmarkdown.JPG" width=650/>]
   ]
 
 .panel[.panel-name[Algunos ejemplos]
@@ -489,12 +488,12 @@ Healy, Kieran. 2018. The Plain Person’s Guide to Plain Text Social Science.
 
 [Métodos de Imputación VIII EPF: Gastos diarios e ingresos de la actividad laboral y jubilaciones](https://www.ine.gob.cl/docs/default-source/documentos-de-trabajo/190320-documento-imputacion-viii-epf.pdf?sfvrsn=668a66c0_2)
 
-**Boletines:**
+**Boletines IPC e IPP:**
 
 .center[
 
 .pull-left[
-<img src= "imagenes/ipc.jpg" width=200/>
+<img src= "imagenes/ipc.JPG" width=200/>
       ]
 .pull-rigth[
 <img src= "imagenes/ipp.JPG" width=200/>]
@@ -527,7 +526,7 @@ Es un .pur[gestor de dependencias] locales de `R`
 
 --
 
-Es es sucesor del paquete `packrat`
+Es el sucesor del paquete `packrat`
 
 --
 
@@ -601,13 +600,15 @@ background-position: 100% 0%
 .panel[.panel-name[¿Qué hemos creado?]
 <br/>
 
-.pur[.Rprofile:] es un archivo que ejecuta RStudio cada vez que se carga una sesión. Este archivo llama a 
+.pur[.Rprofile:] es un archivo que ejecuta RStudio cada vez que se carga una sesión. Este archivo llama a `renv/activate.R file
 
 .pur[renv/.gitignore:] le dice a Git que **ignore** la carpeta de la biblioteca, ya que contiene dependencias que pueden ser de gran tamaño
 
 .pur[renv/activate.R:] archivo que activa el entorno local
 
 .pur[renv/library/*:] carpeta que contiene las dependencias del proyecto
+
+.pur[renv.lock:] archivo que describe el **estado de la librería de proyecto** en un momento determinado
 
   ]   
 ]
@@ -700,7 +701,7 @@ Si prefieres partir de una librería privada vacía y tú poblarla:
 renv::init(bare = TRUE)
 ```
 
-👀 Lo que gatilla el guardado es que en algún script del proyecto haya un `library("paquete")`. Eso le indica a `renv` que se trata de una .pur[dependencia] del ambiente.
+👀 Lo que gatilla el guardado es que en algún script del proyecto haya un `library(paquete)`. Eso le indica a `renv` que se trata de una .pur[dependencia] del ambiente.
 ]
 
 .panel[.panel-name[General]
@@ -862,7 +863,7 @@ background-position: 100% 0%
 
 .medium-par[R for Data Science tiene una traducción al español realizada por la comunidad hispana de R:]
 
-- [R para ciencia de datos, de Hadley Wickham, capítulo 14](https://es.r4ds.hadley.nz/)
+- [R para ciencia de datos, de Hadley Wickham](https://es.r4ds.hadley.nz/)
 
 ---
 
