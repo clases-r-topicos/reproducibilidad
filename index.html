@@ -4,7 +4,7 @@
     <title>Clases abiertas de R - Reproducibilidad</title>
     <meta charset="utf-8" />
     <meta name="author" content="" />
-    <meta name="date" content="2023-07-16" />
+    <meta name="date" content="2023-07-17" />
     <script src="reproducibilidad_files/header-attrs-2.23/header-attrs.js"></script>
     <script src="reproducibilidad_files/clipboard-2.0.6/clipboard.min.js"></script>
     <link href="reproducibilidad_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
@@ -52,7 +52,7 @@ background-position: 100% 0%
 
 
 .center[
-&lt;img src="imagenes/wordcloud_welcome.jpg" width="600"/&gt;
+&lt;img src="imagenes/wordcloud_welcome.jpg" width="550"/&gt;
 ]
 
 ---
@@ -130,7 +130,7 @@ background-position: 100% 0%
 # Comentario preliminar
 
 .center[
-&lt;img src="imagenes/diana.png" width="300" /&gt;
+&lt;img src="imagenes/diana.png" width="250" /&gt;
 ### Público objetivo: orientado a usuarios y usuarias intermedios de R
 ]
 
@@ -142,6 +142,7 @@ background-position: 100% 0%
 
 .center[**Nota:** mirada desde la **producción de estadísticas oficiales**]
 
+.center[**Advertencia:** `renv` podría tener problemas de ejecución en .pur[entornos empresariales]]
 ---
 
 class: inverse, center, middle
@@ -311,7 +312,7 @@ background-position: 100% 0%
 
 &lt;img src="reproducibilidad_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
-Pueden descargar los datos entrando 👉 [aquí](https://github.com/clases-r-topicos/reproducibilidad/blob/master/data/casen_2020_small.dta) 
+**Pueden descargar los datos entrando** 👉 [aquí](https://github.com/clases-r-topicos/reproducibilidad/raw/master/data/casen_2020_small.dta) 
 
 ---
 
@@ -516,6 +517,76 @@ background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
+# Ejemplo práctico
+
+--
+
+**Descarga los siguientes datos** 👉 [aquí](https://github.com/clases-r-topicos/reproducibilidad/raw/master/data/tabla_ejemplo.xlsx)
+
+--
+
+Y copia el siguiente código en R:
+
+
+```r
+library(dplyr)
+library(ggplot2)
+library(haven)
+library(readxl)
+# cargar datos
+df = read_excel("data/tabla_ejemplo.xlsx")
+# crear tabla de resumen
+tabla = df %&gt;% 
+  group_by(sexo) %&gt;% 
+  summarise(time  = mean(tiempo))
+# plot de tiempo según sexo
+ggplot(data= tabla, aes(x = sexo, y = time)) +
+  geom_bar(stat = "identity", fill = "blue") + 
+  geom_text(aes(label= time, vjust=0)) +
+  labs(title="Tiempo promedio según sexo",
+       x ="Sexo", y = "Tiempo promedio") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+```r
+# packageVersion("readxl")
+```
+
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Ejemplo práctico
+
+--
+&lt;br/&gt;
+
+Me aparece el siguiente **error**:
+
+--
+
+&lt;img src = "imagenes/error-readxl.JPG" width=800/&gt;
+
+--
+
+Podemos preguntar a R la versión que tengo de `readwxl` con `packageVersion("readxl")`
+
+--
+
+&lt;img src = "imagenes/version-readxl.JPG" width=800/&gt;
+
+--
+
+La versión más actual disponible de `readxl` es la 1.4.3
+
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
 # ¿Qué es `renv`?
 
 --
@@ -604,9 +675,9 @@ background-position: 100% 0%
 .panel[.panel-name[¿Qué hemos creado?]
 &lt;br/&gt;
 
-.pur[.Rprofile:] es un archivo que ejecuta RStudio cada vez que se carga una sesión. Este archivo llama a `renv/activate.R file
+.pur[.Rprofile:] es un archivo que ejecuta RStudio cada vez que se carga una sesión. Este archivo llama a `renv/activate.R` file
 
-.pur[renv/.gitignore:] le dice a Git que **ignore** la carpeta de la biblioteca, ya que contiene dependencias que pueden ser de gran tamaño
+.pur[renv/.gitignore:] le dice a Git que **ignore**, entre otros, la carpeta de la biblioteca, ya que contiene dependencias que pueden ser de gran tamaño
 
 .pur[renv/activate.R:] archivo que activa el entorno local
 
@@ -641,6 +712,8 @@ Cuando le pregunto a `R` donde están las librerías fuera de `renv` veo algo as
 --
 
 Cuando estoy dentro de un ambiente virtual, estoy parado en otro lugar:
+
+(**Nota:** las rutas que verás probablemente serán direfentes a estas)
 
 --
 
@@ -748,6 +821,15 @@ background-position: 100% 0%
 
 # Mis proyectos con `renv`
 
+--
+
+.medium-par[Ejemplo práctico]
+
+--
+
+.center[&lt;img src ="https://media4.giphy.com/media/9S706ievhjXVfG9s9Q/200w.webp?cid=ecf05e478scjupy2qkpn26qs1t87n973fiesdjl7ff2daxx6&amp;ep=v1_gifs_search&amp;rid=200w.webp&amp;ct=g" width=450/&gt;]
+]
+
 ---
 
 class: inverse, center, middle
@@ -761,6 +843,15 @@ background-size: contain;
 background-position: 100% 0%
 
 # Colaborando con `renv`
+
+--
+&lt;br/&gt;
+
+.medium-par[Ejemplo práctico]
+
+--
+
+.center[&lt;img src ="https://media0.giphy.com/media/l36kU80xPf0ojG0Erg/200w.webp?cid=ecf05e4797shbz9ansita0qvuy9l050drrpqlusnjl0huz78&amp;ep=v1_gifs_search&amp;rid=200w.webp&amp;ct=g" width=600/&gt;]
 
 ---
 
@@ -779,7 +870,7 @@ background-position: 100% 0%
 &lt;br/&gt;
 --
 
-.medium-par[`renv` no es la panacea de la reproducibilidad, es una herramienta más.]
+.medium-par[`renv` no es la .pur[panacea] de la reproducibilidad, es una herramienta más.]
 
 --
 
@@ -791,11 +882,47 @@ background-position: 100% 0%
 
 --
 
-Si un paquete ya no está disponible para descarga
+Si un paquete ya no está disponible para descarga, `renv` no lo puede restaurar.
 
 --
 
 Para obtener una "imagen" estable se requiere considerar también .pur[sistema operativo] y .pur[aplicaciones del sistema] 
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# También existe `Docker`
+
+.pull-left[
+&lt;img src="imagenes/docker-logo.png" width=300 /&gt;
+]
+
+.pull-right[
+
+Plataforma de **código abierto**
+
+Ejecución de aplicaciones en **contenedores**
+
+**Encapsulan** una aplicación y todas ssu dependencias
+ 
+**Mismo comportamiento en diferentes entornos**: maquinas locales, servidores físicos, en nube, etc.  
+
+]
+
+.center[
+.pur[Portabilidad y consistencia
+
+Eficiencia en recursos
+
+Despliegue rápido
+
+Escalabilidad
+
+Aislamiento y seguridad]
+]
+
 
 ---
 
@@ -803,7 +930,7 @@ background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
-# Mini resumen:
+# Resumen y un poco más:
 
 --
 
@@ -849,6 +976,27 @@ background-position: 100% 0%
 --
 &lt;br/&gt;
 .center[&lt;img src= "imagenes/logos-repro.JPG" width=800/&gt;]
+
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Reflexión final:
+
+--
+&lt;br/&gt;
+
+## Ponderar cada caso
+
+--
+
+.pull-center[
+&lt;img src="imagenes/its-fine.JPG" width=700 /&gt;
+]
+
+
 
 ---
 
