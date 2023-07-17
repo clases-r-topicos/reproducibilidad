@@ -4,7 +4,7 @@
     <title>Clases abiertas de R - Reproducibilidad</title>
     <meta charset="utf-8" />
     <meta name="author" content="" />
-    <meta name="date" content="2023-07-14" />
+    <meta name="date" content="2023-07-16" />
     <script src="reproducibilidad_files/header-attrs-2.23/header-attrs.js"></script>
     <script src="reproducibilidad_files/clipboard-2.0.6/clipboard.min.js"></script>
     <link href="reproducibilidad_files/xaringanExtra-clipboard-0.2.6/xaringanExtra-clipboard.css" rel="stylesheet" />
@@ -96,7 +96,6 @@ background-position: 100% 0%
 
 - VII - Comentarios y referencias
       
-      
 &lt;br&gt;
 &lt;br&gt;      
 
@@ -183,10 +182,13 @@ background-position: 100% 0%
 &lt;br/&gt;
 &lt;br/&gt;
 
-
 &lt;img src =https://www.researchgate.net/profile/Arthur_Piazzi/publication/325910795/figure/fig2/AS:640119719620611@1529627842920/Reproducibility-Spectrum.png width="800"/&gt;
 
+.center[👁️: compartir los datos no es algo trivial]
+
 ]
+
+
 
 .panel[.panel-name[¿Sus dimensiones?]
 
@@ -260,7 +262,7 @@ background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
-# Consola de R
+# El principio: Consola de R
 
 --
 &lt;br/&gt;
@@ -273,7 +275,7 @@ Me permite explorar objetos rápidamente con código residual
 
 --
 
-.medium-par[Desventajas:]
+.medium-par[**Desventajas:**]
 
 - Es más complejo desplazarse por distintas líneas de código
 
@@ -293,6 +295,10 @@ Me permite explorar objetos rápidamente con código residual
 
 .medium-par[.pur[Primer upgrade]: **script**] 
 
+--
+
+El **script** me permite almacenar extensas rutinas de código
+
 ---
 
 background-image: url("imagenes/fondo2.PNG")
@@ -304,6 +310,8 @@ background-position: 100% 0%
 --
 
 &lt;img src="reproducibilidad_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
+
+Pueden descargar los datos entrando 👉 [aquí](https://github.com/clases-r-topicos/reproducibilidad/blob/master/data/casen_2020_small.dta) 
 
 ---
 
@@ -320,20 +328,32 @@ library(dplyr)
 library(ggplot2)
 library(haven)
 
-# tabla de casen 2020 con selección de variables y filtrada por jefatura de hogar
-casen2020 = read_dta("C:/Users/Adm-Ignacio/Documents/Proyectos/clases-abiertas-r/reproducibilidad/data/casen_2020_small.dta")
+# tabla de casen 2020 con selección de variables
+*casen2020 = read_dta("C:/Users/Adm-Ignacio/Documents/Proyectos/clases-abiertas-r/reproducibilidad/data/casen_2020_small.dta")
+
+# construcción de variabe de resumen de pobreza
+casen2020 = casen2020 %&gt;% 
+  mutate(pobreza2 = case_when(pobreza == 1 ~ 1,
+                              pobreza == 2 ~ 1,
+                              pobreza == 3 ~ 0,
+                              is.na(pobreza) ~ 0)) %&gt;% 
+  select(region, pobreza2, expr)
 
 # Preparar datos para visualización
 tabla = casen2020 %&gt;% 
   group_by(region) %&gt;% 
-  summarise(frecuencia = sum(expr))
+  summarise(pob_tot = sum(expr),
+            pobres = sum(pobreza2 * expr),
+            por_pob = round((pobres / pob_tot) * 100,1)) %&gt;% 
+  select(-pob_tot, -pobres)
 
-# Plot de hogares según región
-ggplot(data = tabla, aes(x = as.factor(region), y = frecuencia)) + 
-  geom_bar(stat = "identity") + 
-  geom_hline(aes(yintercept = mean(frecuencia))) +
-  labs(title="Hogares según región en Casen 2020",
-       x ="Región numérica", y = "Frecuencia") +
+# Plot de personas pobres según región
+ggplot(data = tabla, aes(x = as.factor(region), y = por_pob)) + 
+  geom_bar(stat = "identity", fill = "orange") + 
+  geom_text(aes(label= por_pob, vjust=0)) +
+  geom_hline(aes(yintercept = mean(por_pob))) +
+  labs(title="Porcentaje de personas pobres por región en Casen 2020",
+       x ="Región numérica", y = "Porcentaje") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
@@ -359,14 +379,18 @@ background-position: 100% 0%
 --
 
 .pull-right[
-&lt;br/&gt;
 
-- No sé si estoy aplicando la misma rutina
+- Estoy usando una **ruta absoluta** a los datos
 
-- No sé si estoy usando los mismos datos
+    - rutas absolutas 
+    
+        - Son propias de mi computador
+        
+        - Son engorrosas de escribir
 
-- Rutas a archivos que son incorrectas
+    - rutas relativas 
 
+        - 👌 
 ]
 
 --
@@ -377,7 +401,6 @@ background-position: 100% 0%
 
 .center[.medium-par[¿Cómo creamos un proyecto?]]
 
-Pueden descargar los datos entrando [aquí](https://github.com/clases-r-topicos/reproducibilidad/blob/master/data/casen_2020_small.dta) 
 
 ---
 
@@ -454,6 +477,10 @@ background-position: 100% 0%
 
 .center[&lt;img src = "imagenes/captura-rmarkdown.JPG" width=650/&gt;]
   ]
+
+.panel[.panel-name[¿Cómo se ve?]
+.center[&lt;img src = "imagenes/compilado_rmarkdown.JPG" width=650/&gt;]
+]
 
 .panel[.panel-name[Algunos ejemplos]
 
