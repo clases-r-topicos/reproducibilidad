@@ -310,9 +310,10 @@ background-position: 100% 0%
 
 --
 
+**Pueden descargar los datos entrando** 👉 [aquí](https://github.com/clases-r-topicos/reproducibilidad/raw/master/data/casen_2020_small.dta) 
+
 &lt;img src="reproducibilidad_files/figure-html/unnamed-chunk-1-1.png" style="display: block; margin: auto;" /&gt;
 
-**Pueden descargar los datos entrando** 👉 [aquí](https://github.com/clases-r-topicos/reproducibilidad/raw/master/data/casen_2020_small.dta) 
 
 ---
 
@@ -517,6 +518,31 @@ background-image: url("imagenes/fondo2.PNG")
 background-size: contain;
 background-position: 100% 0%
 
+# Resumen de upgrades
+
+--
+&lt;br/&gt;
+
+.medium-par[.pur[Primer upgrade:] **script**]
+
+--
+
+.medium-par[.pur[Segundo upgrade:] **proyectos**]
+
+--
+
+.pur[Upgrade 2.1:] **`rmarkdown`**
+
+--
+
+.medium-par[.pur[Tercer upgrade:] **`renv`**]
+
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
 # Ejemplo práctico
 
 --
@@ -571,7 +597,7 @@ Me aparece el siguiente **error**:
 
 --
 
-Podemos preguntar a R la versión que tengo de `readwxl` con `packageVersion("readxl")`
+Podemos preguntar a R la versión que tengo de `readxl` con `packageVersion("readxl")`
 
 --
 
@@ -605,9 +631,6 @@ Es el sucesor del paquete `packrat`
 
 Busca ofrecer la posibilidad de .pur[guardar] y .pur[restaurar] el estado de la **configuración** de un proyecto en un momento determinado.
 
---
-
-.center[.medium-par[.pur[Tercer upgrade:] **`renv`**]]
 
 ---
 
@@ -825,10 +848,59 @@ background-position: 100% 0%
 
 .medium-par[Ejemplo práctico]
 
+
+
+```r
+library(dplyr)
+library(ggplot2)
+library(haven)
+
+# tabla de casen 2020 con selección de variables
+casen2020 = read_dta("data/casen_2020_small.dta")
+
+# construcción de variabe de resumen de pobreza
+casen2020 = casen2020 %&gt;% 
+  mutate(pobreza2 = case_when(pobreza == 1 ~ 1,
+                              pobreza == 2 ~ 1,
+                              pobreza == 3 ~ 0,
+                              is.na(pobreza) ~ 0)) %&gt;% 
+  select(region, pobreza2, expr)
+
+# Preparar datos para visualización
+tabla = casen2020 %&gt;% 
+  group_by(region) %&gt;% 
+  summarise(pob_tot = sum(expr),
+            pobres = sum(pobreza2 * expr),
+            por_pob = round((pobres / pob_tot) * 100,1)) %&gt;% 
+  select(-pob_tot, -pobres)
+
+# Plot de personas pobres según región
+ggplot(data = tabla, aes(x = as.factor(region), y = por_pob)) + 
+  geom_bar(stat = "identity", fill = "orange") + 
+  geom_text(aes(label= por_pob, vjust=0)) +
+  geom_hline(aes(yintercept = mean(por_pob))) +
+  labs(title="Porcentaje de personas pobres por región en Casen 2020",
+       x ="Región numérica", y = "Porcentaje") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+---
+
+background-image: url("imagenes/fondo2.PNG")
+background-size: contain;
+background-position: 100% 0%
+
+# Mis proyectos con `renv`
+
+--
+
+.medium-par[Ejemplo práctico]
+
+
 --
 
 .center[&lt;img src ="https://media4.giphy.com/media/9S706ievhjXVfG9s9Q/200w.webp?cid=ecf05e478scjupy2qkpn26qs1t87n973fiesdjl7ff2daxx6&amp;ep=v1_gifs_search&amp;rid=200w.webp&amp;ct=g" width=450/&gt;]
-]
+
 
 ---
 
@@ -848,6 +920,10 @@ background-position: 100% 0%
 &lt;br/&gt;
 
 .medium-par[Ejemplo práctico]
+
+--
+
+Clona el siguiente repositorio: https://github.com/ignacioagloni/ejemplo-renv-git.git
 
 --
 
